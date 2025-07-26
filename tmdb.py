@@ -2,7 +2,7 @@ import os
 import requests
 import json
 
-API_KEY = os.getenv("TMDB_API_KEY")  # Environment'tan çekiyoruz
+API_KEY = os.getenv("TMDB_API_KEY")  # Render veya yerel ortamdan API_KEY al
 BASE_URL = "https://api.themoviedb.org/3"
 POSTER_BASE = "https://image.tmdb.org/t/p/w500"
 
@@ -43,13 +43,19 @@ def add_to_favorites(item, stars, media_type):
     try:
         with open(filename, "r") as f:
             data = json.load(f)
-            if isinstance(data, list):  # eski format
+            if isinstance(data, list):  # Eski format varsa dönüştür
                 data = {"movies": data, "shows": []}
     except:
         data = {"movies": [], "shows": []}
 
-    item["friendRating"] = stars
-    data[media_type + "s"].append(item)
+    # "movie" veya "tv show" → "movies" ya da "shows"
+    if media_type == "movie":
+        key = "movies"
+    else:
+        key = "shows"
+
+    item["cineselectRating"] = stars
+    data[key].append(item)
 
     with open(filename, "w") as f:
         json.dump(data, f, indent=2)
