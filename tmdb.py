@@ -2,7 +2,7 @@ import os
 import requests
 import json
 
-API_KEY = os.getenv("TMDB_API_KEY")
+API_KEY = os.getenv("TMDB_API_KEY")  # Environment'tan çekiyoruz
 BASE_URL = "https://api.themoviedb.org/3"
 POSTER_BASE = "https://image.tmdb.org/t/p/w500"
 
@@ -12,13 +12,13 @@ def search_movie(query):
     results = []
     for item in res.get("results", []):
         results.append({
-            "id": f"tmdb{item['id']}",
+            "id": f"tt{item['id']}",
             "title": item["title"],
             "year": item["release_date"][:4] if item.get("release_date") else "N/A",
             "poster": f"{POSTER_BASE}{item['poster_path']}" if item.get("poster_path") else "",
             "description": item.get("overview", ""),
-            "imdb": 7.5,  # Placeholder
-            "rt": 85      # Placeholder
+            "imdb": 7.5,   # Placeholder
+            "rt": 85       # Placeholder
         })
     return results
 
@@ -28,21 +28,23 @@ def search_tv(query):
     results = []
     for item in res.get("results", []):
         results.append({
-            "id": f"tmdb{item['id']}",
+            "id": f"tt{item['id']}",
             "title": item["name"],
             "year": item["first_air_date"][:4] if item.get("first_air_date") else "N/A",
             "poster": f"{POSTER_BASE}{item['poster_path']}" if item.get("poster_path") else "",
             "description": item.get("overview", ""),
-            "imdb": 7.5,  # Placeholder
-            "rt": 85      # Placeholder
+            "imdb": 7.8,  # Placeholder
+            "rt": 80      # Placeholder
         })
     return results
 
-def add_to_favorites(item, stars, media_type="movie"):
+def add_to_favorites(item, stars, media_type):
     filename = "favorites.json"
     try:
         with open(filename, "r") as f:
             data = json.load(f)
+            if isinstance(data, list):  # eski format
+                data = {"movies": data, "shows": []}
     except:
         data = {"movies": [], "shows": []}
 
