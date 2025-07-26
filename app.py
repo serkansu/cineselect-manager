@@ -34,10 +34,11 @@ if query:
         st.markdown(f"**{item['title']} ({item['year']})**")
         st.markdown(f"⭐ IMDb: {item['imdb']} &nbsp;&nbsp; 🍅 RT: {item['rt']}%")
 
-        stars = st.slider("Friend Rating", 1, 5, 3, key=f"stars_{idx}")
+        stars = st.slider("🎯 CineSelect Rating", 1, 5, 3, key=f"stars_{idx}")
         if st.button("Add to Favorites", key=f"btn_{idx}"):
-            add_to_favorites(item, stars, media_type.lower())
-            st.success(f"✅ {item['title']} added to {media_type.lower()} favorites!")
+            key = "movie" if media_type == "Movie" else "show"
+            add_to_favorites(item, stars, key)
+            st.success(f"✅ {item['title']} added to your favorites!")
 
 # --- Favoriler bölümü ---
 st.markdown("---")
@@ -54,7 +55,7 @@ def show_favorites(fav_type, label):
                 st.image(fav["poster"], width=150)
                 st.markdown(f"**{fav['title']} ({fav['year']})**")
                 st.markdown(f"⭐ IMDb: {fav['imdb']} &nbsp;&nbsp; 🍅 RT: {fav['rt']}%")
-                st.markdown(f"👥 Friend Rating: {fav['friendRating']}")
+                st.markdown(f"🎯 CineSelect Rating: {fav.get('cineselectRating', 'N/A')}")
                 st.markdown("---")
         else:
             st.info(f"No {label.lower()} favorites yet.")
