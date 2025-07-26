@@ -1,9 +1,13 @@
+import os
+import json
 import streamlit as st
 from tmdb import search_movie, add_to_favorites
 
+# Sayfa başlığı ve yapılandırma
 st.set_page_config(page_title="CineSelect Manager", layout="centered")
 st.title("🎬 CineSelect Manager")
 
+# Film arama bölümü
 query = st.text_input("🔍 Search for a movie")
 if query:
     results = search_movie(query)
@@ -16,6 +20,26 @@ if query:
         if st.button("Add to Favorites", key=f"btn_{idx}"):
             add_to_favorites(movie, stars)
             st.success(f"✅ {movie['title']} added to favorites!")
+
+# Favori filmleri gösterme bölümü
+st.markdown("---")
+st.subheader("❤️ Your Favorite Movies")
+
+if os.path.exists("favorites.json"):
+    with open("favorites.json", "r") as f:
+        favs = json.load(f)
+
+    if favs:
+        for fav in favs:
+            st.image(fav["poster"], width=150)
+            st.markdown(f"**{fav['title']} ({fav['year']})**")
+            st.markdown(f"⭐ IMDb: {fav['imdb']} &nbsp;&nbsp; 🍅 RT: {fav['rt']}%")
+            st.markdown(f"👥 Friend Rating: {fav['friendRating']}")
+            st.markdown("---")
+    else:
+        st.info("You haven't added any favorites yet.")
+else:
+    st.info("No favorites found yet.")
 
 # Footer
 st.markdown("---")
