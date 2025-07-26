@@ -30,7 +30,10 @@ query = st.text_input(f"🔍 Search for a {media_type.lower()}")
 if query:
     results = search_movie(query) if media_type == "Movie" else search_tv(query)
     for idx, item in enumerate(results):
-        st.image(item["poster"])
+        if item["poster"]:
+            st.image(item["poster"])
+        else:
+            st.warning("No poster available.")
         st.markdown(f"**{item['title']} ({item['year']})**")
         st.markdown(f"⭐ IMDb: {item['imdb']} &nbsp;&nbsp; 🍅 RT: {item['rt']}%")
 
@@ -52,7 +55,10 @@ def show_favorites(fav_type, label):
         if favs:
             st.markdown(f"### 📁 {label}")
             for fav in favs:
-                st.image(fav["poster"], width=150)
+                if fav.get("poster"):
+                    st.image(fav["poster"], width=150)
+                else:
+                    st.warning("No poster available.")
                 st.markdown(f"**{fav['title']} ({fav['year']})**")
                 st.markdown(f"⭐ IMDb: {fav['imdb']} &nbsp;&nbsp; 🍅 RT: {fav['rt']}%")
                 st.markdown(f"🎯 CineSelect Rating: {fav.get('cineselectRating', 'N/A')}")
