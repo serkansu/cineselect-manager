@@ -17,8 +17,8 @@ def search_movie(query):
             "year": item["release_date"][:4] if item.get("release_date") else "N/A",
             "poster": f"{POSTER_BASE}{item['poster_path']}" if item.get("poster_path") else "",
             "description": item.get("overview", ""),
-            "imdb": 7.5,   # Placeholder
-            "rt": 85       # Placeholder
+            "imdb": 7.5,   # Placeholder – ileride API'den alınabilir
+            "rt": 85       # Placeholder – ileride RT API'den alınabilir
         })
     return results
 
@@ -33,8 +33,8 @@ def search_tv(query):
             "year": item["first_air_date"][:4] if item.get("first_air_date") else "N/A",
             "poster": f"{POSTER_BASE}{item['poster_path']}" if item.get("poster_path") else "",
             "description": item.get("overview", ""),
-            "imdb": 7.8,  # Placeholder
-            "rt": 80      # Placeholder
+            "imdb": 7.8,   # Placeholder
+            "rt": 80       # Placeholder
         })
     return results
 
@@ -43,16 +43,12 @@ def add_to_favorites(item, stars, media_type):
     try:
         with open(filename, "r") as f:
             data = json.load(f)
-            if isinstance(data, list):  # Eski format varsa dönüştür
+            if isinstance(data, list):
                 data = {"movies": data, "shows": []}
     except:
         data = {"movies": [], "shows": []}
 
-    # "movie" veya "tv show" → "movies" ya da "shows"
-    if media_type == "movie":
-        key = "movies"
-    else:
-        key = "shows"
+    key = "movies" if media_type == "movie" else "shows"
 
     item["cineselectRating"] = stars
     data[key].append(item)
