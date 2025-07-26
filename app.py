@@ -16,3 +16,7 @@ if query:
         if st.button("Add to Favorites", key=f"btn_{idx}"):
             add_to_favorites(movie, stars)
             st.success(f"✅ {movie['title']} added to favorites!")
+
+# Footer
+st.markdown("---")
+st.markdown("<p style='text-align: center; color: gray;'>Created by <b>SS</b></p>", unsafe_allow_html=True)
