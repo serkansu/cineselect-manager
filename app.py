@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import firebase_admin
+import base64
 from firebase_admin import credentials, firestore
 import json
 def get_imdb_id_from_tmdb(title, year=None, is_series=False):
